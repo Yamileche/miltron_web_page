@@ -1,0 +1,28 @@
+/* src/components/Header.css */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  background: #111;
+  color: white;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  z-index: 1000;
+  align-items: center;
+}
+
+.header nav a {
+  margin-left: 1rem;
+  margin-right: 2rem;
+  color: #8892B0;
+  text-decoration: none;
+}
+
+.header h1 {
+  font-size: 1rem; /* 👈 reduce texto si sobresale */
+  margin: 0;
+  color: #64FFDA;
+}
