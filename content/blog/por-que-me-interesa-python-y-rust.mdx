@@ -1,0 +1,52 @@
+---
+title: "Por qué me interesa combinar Python y Rust"
+description: "Productividad para AI con Python y control para componentes específicos con Rust, sin convertir la mezcla en un objetivo por sí mismo."
+date: "2026-08-09"
+tags:
+  - Python
+  - Rust
+  - Architecture
+published: true
+---
+
+Python es el centro de buena parte de mi trabajo backend y de mis experimentos con Inteligencia Artificial. Rust me interesa por razones diferentes: rendimiento predecible, concurrencia y un modelo de memoria que hace explícitas muchas decisiones.
+
+No busco reemplazar uno con otro. Me interesa entender dónde se complementan.
+
+## Python para iterar
+
+Python permite pasar rápidamente de una idea a un servicio funcional. Su ecosistema es especialmente fuerte para:
+
+- APIs y orquestación.
+- Integración con proveedores de modelos.
+- Procesamiento y validación de datos.
+- Experimentación con RAG y agentes.
+- Automatización y pruebas de conceptos.
+
+En una capa donde la latencia principal proviene de red, bases de datos o inferencia remota, reescribir código en otro lenguaje puede no producir una mejora relevante.
+
+## Rust para límites concretos
+
+Rust puede ser interesante cuando un perfil muestra un cuello de botella claro o cuando un componente necesita garantías particulares:
+
+- Transformaciones intensivas de CPU.
+- Procesamiento concurrente con control fino.
+- Parsers o validadores ejecutados muchas veces.
+- Servicios con restricciones fuertes de memoria.
+- Extensiones nativas consumidas desde Python.
+
+Herramientas como PyO3 permiten crear módulos de Python en Rust, pero esa integración también añade compilación, empaquetado y una frontera entre lenguajes que hay que mantener.
+
+## Una regla antes de mezclar
+
+> Primero medir; después decidir.
+
+Una arquitectura híbrida solo tiene sentido si el beneficio compensa su complejidad. Mi proceso ideal sería:
+
+1. Construir la primera versión en Python.
+2. Medir el comportamiento con una carga representativa.
+3. Identificar el componente que limita al sistema.
+4. Probar una implementación acotada en Rust.
+5. Comparar rendimiento, consumo y costo de mantenimiento.
+
+Por ahora esto es un área de investigación personal. La meta no es introducir Rust en cada servicio, sino adquirir el criterio para reconocer cuándo aporta una ventaja medible y cuándo Python ya es la herramienta correcta.

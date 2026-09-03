@@ -1,0 +1,72 @@
+---
+title: "Anatomía básica de un agente con LangGraph"
+description: "Estado, nodos, edges y herramientas: un mapa conceptual para entender un workflow de agente."
+date: "2026-08-18"
+tags:
+  - AI Agents
+  - LangGraph
+  - Python
+published: true
+---
+
+Un agente no es únicamente una llamada a un LLM. En cuanto necesita utilizar herramientas, conservar contexto o decidir si debe continuar, aparece un **flujo de ejecución**. LangGraph permite representar ese flujo como un grafo con estado.
+
+## Las piezas del grafo
+
+Un workflow básico contiene:
+
+- **Estado:** la información compartida durante una ejecución, por ejemplo mensajes o resultados parciales.
+- **Nodos:** funciones que leen el estado y devuelven actualizaciones.
+- **Edges:** conexiones que determinan qué nodo se ejecuta después.
+- **Condiciones:** decisiones de enrutamiento basadas en el estado.
+- **Herramientas:** funciones externas que el modelo puede solicitar cuando necesita actuar u obtener información.
+
+El mapa mental es sencillo:
+
+```text
+START → agent → ¿solicitó una herramienta? ── no ─→ END
+                  │
+                  sí
+                  ↓
+                tools ─→ agent
+```
+
+## El estado como contrato
+
+En Python, el estado puede describirse mediante un tipo explícito. Este ejemplo es deliberadamente pequeño:
+
+```python
+from typing import Annotated, TypedDict
+from langgraph.graph.message import add_messages
+
+class AgentState(TypedDict):
+    messages: Annotated[list, add_messages]
+```
+
+El reducer `add_messages` expresa cómo combinar actualizaciones de mensajes en lugar de sustituir toda la lista en cada paso.
+
+## Nodos y decisiones
+
+Conceptualmente, el nodo del agente invoca al modelo con el estado actual. Si la respuesta contiene una solicitud de herramienta, un edge condicional dirige la ejecución al nodo de herramientas. Después, el resultado vuelve al agente para que produzca una respuesta o decida otro paso.
+
+```python
+def route_after_agent(state: AgentState) -> str:
+    last_message = state["messages"][-1]
+    return "tools" if last_message.tool_calls else "end"
+```
+
+Este fragmento ilustra la decisión, no una aplicación completa. En un proyecto real todavía hay que definir el modelo, enlazar herramientas, construir el grafo y establecer límites de ejecución, manejo de errores y persistencia según el caso.
+
+## Por qué me resulta útil
+
+El grafo vuelve visibles decisiones que dentro de un ciclo grande serían difíciles de observar. También facilita separar responsabilidades: un nodo puede generar, otro validar y otro solicitar aprobación humana.
+
+Algunas preguntas que conviene resolver antes de agregar más agentes son:
+
+1. ¿Qué estado necesita realmente el workflow?
+2. ¿Qué operaciones deben ser deterministas?
+3. ¿Dónde puede fallar una herramienta y cómo se recupera el flujo?
+4. ¿Qué acción requiere aprobación humana?
+5. ¿Cómo se limita un ciclo que no converge?
+
+Mi objetivo actual es aprender a diseñar grafos pequeños y verificables antes de construir arquitecturas multiagente más complejas.

@@ -1,73 +1,57 @@
-# React + TypeScript + Vite
+# Portfolio de Milton Velazquez
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Portfolio profesional construido con Next.js, TypeScript y App Router. Incluye tema claro/oscuro, contenido editable, proyectos, aprendizaje continuo y blog técnico basado en Markdown/MDX.
 
-Currently, two official plugins are available:
+## Desarrollo local
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Antes de desplegar:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run typecheck
+npm run lint
+npm run build
 ```
+
+## Contenido editable
+
+- Perfil, enlaces, fotografía y CV: `src/data/profile.ts`
+- Proyectos: `src/data/projects.ts`
+- Tecnologías: `src/data/skills.ts`
+- Cursos y learning log: `src/data/learning.ts`
+
+### Publicar un artículo
+
+Crea un archivo `.mdx` en `content/blog/`. El índice y el sitemap lo detectan automáticamente.
+
+```yaml
+---
+title: "Título del artículo"
+description: "Resumen breve."
+date: "2026-09-03"
+tags:
+  - Python
+  - Learning
+published: true
+---
+```
+
+Usa `published: false` para mantener un borrador fuera del sitio. El contenido admite Markdown, tablas, links y bloques de código con lenguaje (por ejemplo, un fence con `python`).
+
+### Fotografía, CV y enlaces
+
+1. Coloca la fotografía en `public/profile.jpg`.
+2. En `src/data/profile.ts`, cambia `profileImage` a `"/profile.jpg"`.
+3. Coloca el CV en `public/Milton_Velazquez_CV.pdf`.
+4. Cambia `cvPath` a `"/Milton_Velazquez_CV.pdf"` para mostrar el botón.
+5. Completa `github` y `email`; los enlaces permanecen ocultos mientras estén vacíos.
+
+## SEO y Vercel
+
+Configura `NEXT_PUBLIC_SITE_URL` con el dominio final, sin slash al final. Esa URL se usa para canonical, Open Graph, `robots.txt` y `sitemap.xml`.
+
+Vercel detecta Next.js automáticamente; no requiere configuración adicional.

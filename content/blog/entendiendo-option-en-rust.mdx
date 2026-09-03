@@ -1,0 +1,69 @@
+---
+title: "Entendiendo Option<T> en Rust"
+description: "Mis notas sobre cómo Rust representa la ausencia de un valor y qué cambia al venir de Python."
+date: "2026-09-03"
+tags:
+  - Rust
+  - Learning
+published: true
+---
+
+Cuando empecé a estudiar Rust, `Option<T>` me pareció familiar: en Python uso `None` todo el tiempo. La diferencia importante no está en la idea de “no hay valor”, sino en **dónde se expresa esa posibilidad**.
+
+## Ausencia como parte del tipo
+
+En Rust, un valor opcional tiene una de dos variantes:
+
+```rust
+enum Option<T> {
+    None,
+    Some(T),
+}
+```
+
+Si una función busca un elemento y puede no encontrarlo, su firma lo hace explícito:
+
+```rust
+fn find_port(config: &str) -> Option<u16> {
+    config
+        .lines()
+        .find_map(|line| line.strip_prefix("port="))
+        .and_then(|value| value.parse().ok())
+}
+```
+
+Quien llama a la función debe considerar ambos casos. `match` es la forma más directa:
+
+```rust
+match find_port("host=localhost\nport=8080") {
+    Some(port) => println!("Listening on {port}"),
+    None => println!("Using the default port"),
+}
+```
+
+También existen combinadores como `map`, `and_then` y `unwrap_or`, que permiten transformar el valor sin ignorar la ausencia.
+
+## Comparación conceptual con Python
+
+En Python, `None` es un objeto singleton y una función puede devolverlo aunque su firma no lo anuncie. Los type hints ayudan, pero Python no los exige en tiempo de ejecución:
+
+```python
+def find_port(config: str) -> int | None:
+    for line in config.splitlines():
+        if line.startswith("port="):
+            return int(line.removeprefix("port="))
+    return None
+```
+
+| Aspecto | Rust | Python |
+| --- | --- | --- |
+| Representación | `Option<T>` | `None` |
+| Se expresa en la firma | Sí | Solo si se añade type hint |
+| Comprobación principal | Compilador | Ejecución y herramientas estáticas |
+| Acceso al valor | Pattern matching o combinadores | Condiciones como `is not None` |
+
+No significa que un enfoque sea universalmente mejor. En scripts pequeños, la flexibilidad de Python es muy productiva. En sistemas con más estados y caminos de ejecución, que la ausencia forme parte del tipo puede eliminar una familia de errores antes de ejecutar el programa.
+
+> Mi aprendizaje principal: `Option<T>` no es únicamente el `None` de Rust; es un contrato que obliga a modelar el caso ausente.
+
+Todavía estoy explorando cuándo conviene usar `match` y cuándo los combinadores producen código más legible. Evitar `unwrap()` por costumbre parece un buen punto de partida.

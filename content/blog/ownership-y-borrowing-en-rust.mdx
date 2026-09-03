@@ -1,0 +1,62 @@
+---
+title: "Ownership y borrowing en Rust viniendo de Python"
+description: "Primeras impresiones sobre ownership, préstamos y referencias desde la perspectiva de un desarrollador Python."
+date: "2026-08-27"
+tags:
+  - Rust
+  - Python
+  - Learning
+published: true
+---
+
+Python me acostumbró a concentrarme en el comportamiento de los objetos y dejar que el recolector de basura administrara buena parte de su ciclo de vida. Rust pide pensar explícitamente en quién posee un valor y durante cuánto tiempo puede utilizarse.
+
+## Una variable, un propietario
+
+Para muchos valores asignados en el heap, una asignación mueve la propiedad:
+
+```rust
+let service = String::from("geolocation");
+let active_service = service;
+
+// println!("{service}"); // Error: el valor fue movido
+println!("{active_service}");
+```
+
+Al principio parece restrictivo. Después empieza a sentirse como información útil: el compilador deja claro qué parte del programa es responsable del valor.
+
+## Pedir prestado en lugar de mover
+
+Si una función solo necesita leer, puede recibir una referencia:
+
+```rust
+fn service_name_length(name: &str) -> usize {
+    name.len()
+}
+
+let service = String::from("geolocation");
+let length = service_name_length(&service);
+
+println!("{service}: {length}");
+```
+
+La función toma prestado `service`; no se convierte en su propietaria. Para modificar un valor existe `&mut T`, sujeto a reglas que evitan accesos mutables incompatibles.
+
+## Mi cambio de modelo mental
+
+En Python suelo preguntar: “¿Este nombre todavía apunta al objeto?”. En Rust también tengo que preguntar:
+
+1. ¿Quién posee el valor?
+2. ¿Lo estoy moviendo o prestando?
+3. ¿La referencia puede vivir tanto como el dato al que apunta?
+4. ¿Existe otro acceso que entre en conflicto con esta mutación?
+
+Estas reglas permiten administrar memoria sin un garbage collector y, al mismo tiempo, prevenir referencias inválidas y varias condiciones de carrera desde compilación.
+
+## Lo que todavía estoy aprendiendo
+
+Los ejemplos pequeños son claros; el reto aparece al diseñar estructuras, lifetimes y APIs reales. Mi objetivo no es luchar contra el borrow checker, sino entender qué diseño está intentando hacer explícito.
+
+> Ownership parece menos una característica aislada y más una forma distinta de describir las responsabilidades dentro de un programa.
+
+Esa diferencia es precisamente lo que me interesa: obliga a observar decisiones de memoria y concurrencia que en Python normalmente quedan ocultas detrás del runtime.
