@@ -325,6 +325,38 @@ svg {
   height: 16px;
 }
 
+.language-toggle {
+  display: inline-flex;
+  height: 38px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  transition: border-color 150ms ease, background 150ms ease, transform 150ms ease;
+}
+
+.language-toggle:hover {
+  border-color: var(--border-strong);
+  background: var(--surface-raised);
+  transform: translateY(-1px);
+}
+
+.language-toggle__active {
+  color: var(--accent);
+}
+
+.language-toggle__separator {
+  color: var(--border-strong);
+  font-weight: 400;
+}
+
 .theme-icon--sun {
   display: none;
 }

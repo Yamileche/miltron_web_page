@@ -1,0 +1,66 @@
+---
+title: "A basic anatomy of an agent with LangGraph"
+description: "State, nodes, edges and tools: a conceptual map for understanding an agent workflow."
+---
+
+An agent is not only a call to an LLM. As soon as it needs to use tools, preserve context, or decide whether to continue, an **execution flow** appears. LangGraph makes it possible to represent that flow as a stateful graph.
+
+## The parts of a graph
+
+A basic workflow contains:
+
+- **State:** information shared during an execution, such as messages or partial results.
+- **Nodes:** functions that read the state and return updates.
+- **Edges:** connections that determine which node executes next.
+- **Conditions:** routing decisions based on state.
+- **Tools:** external functions the model can request when it needs to act or retrieve information.
+
+The mental model is simple:
+
+```text
+START → agent → requested a tool? ── no ─→ END
+                  │
+                  yes
+                  ↓
+                tools ─→ agent
+```
+
+## State as a contract
+
+In Python, state can be described with an explicit type. This example is deliberately small:
+
+```python
+from typing import Annotated, TypedDict
+from langgraph.graph.message import add_messages
+
+class AgentState(TypedDict):
+    messages: Annotated[list, add_messages]
+```
+
+The `add_messages` reducer expresses how to combine message updates instead of replacing the entire list at each step.
+
+## Nodes and decisions
+
+Conceptually, the agent node invokes the model with the current state. If the response includes a tool request, a conditional edge routes execution to the tools node. Then the result returns to the agent so it can produce an answer or choose another step.
+
+```python
+def route_after_agent(state: AgentState) -> str:
+    last_message = state["messages"][-1]
+    return "tools" if last_message.tool_calls else "end"
+```
+
+This snippet illustrates the decision, not a complete application. A real project still needs to define the model, bind tools, build the graph, and establish execution limits, error handling, and persistence as needed.
+
+## Why it is useful to me
+
+The graph makes decisions visible that would be difficult to observe inside a large loop. It also makes responsibilities easier to separate: one node can generate, another validate, and another request human approval.
+
+Questions worth answering before adding more agents include:
+
+1. What state does the workflow actually need?
+2. Which operations should be deterministic?
+3. Where can a tool fail, and how does the flow recover?
+4. Which action requires human approval?
+5. How is a non-converging loop bounded?
+
+My current goal is to learn how to design small, verifiable graphs before building more complex multi-agent architectures.

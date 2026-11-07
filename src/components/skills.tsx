@@ -1,18 +1,23 @@
+"use client";
+
 import { Braces, CloudCog, Code2, Cpu, Database, Wrench } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { skillGroups } from "@/data/skills";
 import { SectionHeading } from "@/components/ui/section-heading";
+import { useLanguage } from "@/components/language-provider";
 
 const icons: LucideIcon[] = [Code2, Cpu, CloudCog, Database, Wrench, Braces];
 
 export function Skills() {
+  const { language } = useLanguage();
+  const english = language === "en";
   return (
     <section className="section" id="tecnologias">
       <div className="container">
         <SectionHeading
-          eyebrow="04 / Tecnologías"
-          title="Herramientas organizadas por propósito."
-          description="Sin porcentajes arbitrarios: tecnologías que uso y áreas en las que estoy profundizando."
+          eyebrow={english ? "04 / Skills" : "04 / Tecnologías"}
+          title={english ? "Tools organized by purpose." : "Herramientas organizadas por propósito."}
+          description={english ? "No arbitrary percentages: technologies I use and areas I am deepening." : "Sin porcentajes arbitrarios: tecnologías que uso y áreas en las que estoy profundizando."}
         />
         <div className="skills-grid">
           {skillGroups.map((group, index) => {

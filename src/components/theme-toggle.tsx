@@ -1,6 +1,7 @@
 "use client";
 
 import { Moon, Sun } from "lucide-react";
+import { useLanguage } from "@/components/language-provider";
 
 type Theme = "light" | "dark";
 
@@ -11,6 +12,7 @@ function getTheme(): Theme {
 }
 
 export function ThemeToggle() {
+  const { language } = useLanguage();
   function toggleTheme() {
     const nextTheme = getTheme() === "dark" ? "light" : "dark";
     document.documentElement.dataset.theme = nextTheme;
@@ -22,8 +24,8 @@ export function ThemeToggle() {
       className="icon-button"
       type="button"
       onClick={toggleTheme}
-      aria-label="Cambiar tema de color"
-      title="Cambiar tema"
+      aria-label={language === "en" ? "Change color theme" : "Cambiar tema de color"}
+      title={language === "en" ? "Change theme" : "Cambiar tema"}
     >
       <Sun className="theme-icon theme-icon--sun" aria-hidden="true" />
       <Moon className="theme-icon theme-icon--moon" aria-hidden="true" />

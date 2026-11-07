@@ -1,16 +1,21 @@
+"use client";
+
 import { ArrowRight, BookOpen, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { learningAreas, learningLog } from "@/data/learning";
 import { SectionHeading } from "@/components/ui/section-heading";
+import { useLanguage } from "@/components/language-provider";
 
 export function Learning() {
+  const { language } = useLanguage();
+  const english = language === "en";
   return (
     <section className="section section--bordered" id="aprendizaje">
       <div className="container">
         <SectionHeading
-          eyebrow="05 / Aprendizaje continuo"
-          title="Aprender, aplicar, documentar."
-          description="Una trayectoria que conecta backend y cloud con mi crecimiento hacia AI Engineering y sistemas."
+          eyebrow={english ? "05 / Continuous learning" : "05 / Aprendizaje continuo"}
+          title={english ? "Learn, apply, document." : "Aprender, aplicar, documentar."}
+          description={english ? "A path connecting backend and cloud with my growth toward AI Engineering and systems." : "Una trayectoria que conecta backend y cloud con mi crecimiento hacia AI Engineering y sistemas."}
         />
         <div className="learning-layout">
           <div className="learning-areas">
@@ -25,7 +30,7 @@ export function Learning() {
                   </ul>
                   {area.additional ? (
                     <details>
-                      <summary>Ver más <ChevronDown aria-hidden="true" /></summary>
+                      <summary>{english ? "See more" : "Ver más"} <ChevronDown aria-hidden="true" /></summary>
                       <ul>{area.additional.map((item) => <li key={item}>{item}</li>)}</ul>
                     </details>
                   ) : null}
@@ -44,7 +49,7 @@ export function Learning() {
                 <ul>{log.entries.map((entry) => <li key={entry}>→ {entry}</li>)}</ul>
               </div>
             ))}
-            <Link href="/blog">Ver notas técnicas <ArrowRight aria-hidden="true" /></Link>
+            <Link href="/blog">{english ? "View technical notes" : "Ver notas técnicas"} <ArrowRight aria-hidden="true" /></Link>
           </aside>
         </div>
       </div>

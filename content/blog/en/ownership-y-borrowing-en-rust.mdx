@@ -1,0 +1,56 @@
+---
+title: "Ownership and borrowing in Rust, coming from Python"
+description: "First impressions of ownership, borrowing and references from a Python developer’s perspective."
+---
+
+Python taught me to focus on object behavior and let the garbage collector manage much of their lifecycle. Rust asks me to think explicitly about who owns a value and for how long it can be used.
+
+## One variable, one owner
+
+For many heap-allocated values, an assignment moves ownership:
+
+```rust
+let service = String::from("geolocation");
+let active_service = service;
+
+// println!("{service}"); // Error: the value was moved
+println!("{active_service}");
+```
+
+At first this seems restrictive. Later, it starts to feel like useful information: the compiler makes clear which part of the program is responsible for the value.
+
+## Borrowing instead of moving
+
+If a function only needs to read a value, it can receive a reference:
+
+```rust
+fn service_name_length(name: &str) -> usize {
+    name.len()
+}
+
+let service = String::from("geolocation");
+let length = service_name_length(&service);
+
+println!("{service}: {length}");
+```
+
+The function borrows `service`; it does not become its owner. To modify a value, `&mut T` is available, subject to rules that prevent incompatible mutable access.
+
+## My change in mental model
+
+In Python I usually ask, “Does this name still point to the object?” In Rust I also have to ask:
+
+1. Who owns the value?
+2. Am I moving it or borrowing it?
+3. Can the reference live as long as the data it points to?
+4. Is there another access that conflicts with this mutation?
+
+These rules make it possible to manage memory without a garbage collector while also preventing invalid references and many race conditions at compile time.
+
+## What I am still learning
+
+Small examples are clear; the challenge appears when designing real structures, lifetimes and APIs. My goal is not to fight the borrow checker, but to understand which design it is trying to make explicit.
+
+> Ownership feels less like an isolated feature and more like a different way of describing responsibilities inside a program.
+
+That difference is exactly what interests me: it makes memory and concurrency decisions visible when they would normally remain hidden behind Python’s runtime.

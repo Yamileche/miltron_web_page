@@ -1,0 +1,64 @@
+---
+title: "Understanding Option<T> in Rust"
+description: "My notes on how Rust represents the absence of a value and what changes when coming from Python."
+---
+
+When I started learning Rust, `Option<T>` felt familiar: I use `None` in Python all the time. The important difference is not the idea of “no value,” but **where that possibility is expressed**.
+
+## Absence as part of the type
+
+In Rust, an optional value has one of two variants:
+
+```rust
+enum Option<T> {
+    None,
+    Some(T),
+}
+```
+
+If a function looks for an item and might not find it, its signature makes that explicit:
+
+```rust
+fn find_port(config: &str) -> Option<u16> {
+    config
+        .lines()
+        .find_map(|line| line.strip_prefix("port="))
+        .and_then(|value| value.parse().ok())
+}
+```
+
+Whoever calls the function has to account for both cases. `match` is the most direct form:
+
+```rust
+match find_port("host=localhost\nport=8080") {
+    Some(port) => println!("Listening on {port}"),
+    None => println!("Using the default port"),
+}
+```
+
+There are also combinators such as `map`, `and_then`, and `unwrap_or`, which make it possible to transform a value without ignoring its absence.
+
+## A conceptual comparison with Python
+
+In Python, `None` is a singleton object and a function can return it even when its signature does not announce it. Type hints help, but Python does not enforce them at runtime:
+
+```python
+def find_port(config: str) -> int | None:
+    for line in config.splitlines():
+        if line.startswith("port="):
+            return int(line.removeprefix("port="))
+    return None
+```
+
+| Aspect | Rust | Python |
+| --- | --- | --- |
+| Representation | `Option<T>` | `None` |
+| Expressed in the signature | Yes | Only when a type hint is added |
+| Main check | Compiler | Runtime and static tools |
+| Accessing the value | Pattern matching or combinators | Conditions such as `is not None` |
+
+This does not mean one approach is universally better. In small scripts, Python’s flexibility is highly productive. In systems with more states and execution paths, making absence part of the type can remove a family of errors before the program runs.
+
+> My main takeaway: `Option<T>` is not simply Rust’s `None`; it is a contract that forces the absent case to be modeled.
+
+I am still exploring when `match` is preferable and when combinators produce more readable code. Avoiding habitual `unwrap()` calls seems like a good starting point.

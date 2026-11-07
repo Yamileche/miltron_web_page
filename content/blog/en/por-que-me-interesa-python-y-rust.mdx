@@ -1,0 +1,46 @@
+---
+title: "Why I am interested in combining Python and Rust"
+description: "Productivity for AI with Python and control for specific components with Rust, without turning the mix into a goal of its own."
+---
+
+Python is central to much of my backend work and Artificial Intelligence experiments. Rust interests me for different reasons: predictable performance, concurrency, and a memory model that makes many decisions explicit.
+
+I am not looking to replace one with the other. I am interested in where they complement each other.
+
+## Python for iteration
+
+Python makes it possible to move quickly from an idea to a functional service. Its ecosystem is especially strong for:
+
+- APIs and orchestration.
+- Integration with model providers.
+- Data processing and validation.
+- Experimentation with RAG and agents.
+- Automation and proofs of concept.
+
+In a layer where the main latency comes from the network, databases, or remote inference, rewriting code in another language may not result in a meaningful improvement.
+
+## Rust for concrete boundaries
+
+Rust can be interesting when a profile reveals a clear bottleneck or when a component needs particular guarantees:
+
+- CPU-intensive transformations.
+- Concurrent processing with fine-grained control.
+- Parsers or validators that run many times.
+- Services with strict memory constraints.
+- Native extensions consumed from Python.
+
+Tools such as PyO3 make it possible to create Python modules in Rust, but that integration also adds compilation, packaging, and a language boundary that must be maintained.
+
+## A rule before mixing
+
+> Measure first; decide second.
+
+A hybrid architecture only makes sense when its benefit outweighs its complexity. My ideal process would be:
+
+1. Build the first version in Python.
+2. Measure its behavior under representative load.
+3. Identify the component that limits the system.
+4. Try a bounded implementation in Rust.
+5. Compare performance, resource consumption, and maintenance cost.
+
+For now, this is an area of personal research. The goal is not to introduce Rust into every service, but to develop the judgment to recognize when it provides a measurable advantage and when Python is already the right tool.

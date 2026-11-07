@@ -18,8 +18,8 @@ export const profile = {
     "https://www.linkedin.com/in/milton-yamil-velazquez-montoya-884454232",
   github: "",
   email: "",
-  profileImage: "", // Añade public/profile.jpg y cambia este valor a "/profile.jpg".
-  cvPath: "", // Añade public/Milton_Velazquez_CV.pdf y usa "/Milton_Velazquez_CV.pdf".
+  profileImage: "/profile.png",
+  cvPath: "/Milton_Velazquez_CV.pdf",
 } as const;
 
 export type Experience = {

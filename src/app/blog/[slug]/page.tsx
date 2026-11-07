@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import { ArrowLeft, ArrowRight, Clock3 } from "lucide-react";
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArticleView } from "@/components/blog/article-view";
 import { MarkdownContent } from "@/components/blog/markdown-content";
-import { formatPostDate, getAdjacentPosts, getAllPosts, getPostBySlug } from "@/lib/blog";
+import { getAdjacentPosts, getAllPosts, getPostBySlug } from "@/lib/blog";
 
 type ArticlePageProps = {
   params: Promise<{ slug: string }>;
@@ -50,36 +49,14 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     author: { "@type": "Person", name: "Milton Yamil Velazquez Montoya" },
   };
 
-  return (
-    <article className="article-page">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
-      <div className="article-shell">
-        <Link className="back-link" href="/blog"><ArrowLeft aria-hidden="true" /> Todos los artículos</Link>
-        <header className="article-header">
-          <ul className="post-tags" aria-label="Temas">{post.tags.map((tag) => <li key={tag}>{tag}</li>)}</ul>
-          <h1>{post.title}</h1>
-          <p>{post.description}</p>
-          <div className="article-meta">
-            <time dateTime={post.date}>{formatPostDate(post.date)}</time>
-            <span><Clock3 aria-hidden="true" /> {post.readingTime} min de lectura</span>
-          </div>
-        </header>
-        <MarkdownContent content={post.content} />
-        <nav className="article-navigation" aria-label="Navegación entre artículos">
-          {older ? (
-            <Link href={`/blog/${older.slug}`}>
-              <span><ArrowLeft aria-hidden="true" /> Anterior</span>
-              <strong>{older.title}</strong>
-            </Link>
-          ) : <span />}
-          {newer ? (
-            <Link href={`/blog/${newer.slug}`}>
-              <span>Siguiente <ArrowRight aria-hidden="true" /></span>
-              <strong>{newer.title}</strong>
-            </Link>
-          ) : null}
-        </nav>
-      </div>
-    </article>
-  );
+  return <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
+    <ArticleView
+      post={post}
+      newer={newer}
+      older={older}
+      spanishContent={<MarkdownContent content={post.content} />}
+      englishContent={post.translation ? <MarkdownContent content={post.translation.content} /> : undefined}
+    />
+  </>;
 }

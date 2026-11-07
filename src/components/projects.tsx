@@ -1,17 +1,22 @@
+"use client";
+
 import { ArrowRight, FlaskConical } from "lucide-react";
 import Link from "next/link";
 import { projects } from "@/data/projects";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { TagList } from "@/components/ui/tag-list";
+import { useLanguage } from "@/components/language-provider";
 
 export function Projects() {
+  const { language } = useLanguage();
+  const english = language === "en";
   return (
     <section className="section section--muted" id="proyectos">
       <div className="container">
         <SectionHeading
-          eyebrow="03 / Proyectos"
-          title="Experimentos que convierten ideas en sistemas."
-          description="Trabajo personal y conceptual alrededor de agentes, modelos locales y arquitecturas híbridas."
+          eyebrow={english ? "03 / Projects" : "03 / Proyectos"}
+          title={english ? "Experiments that turn ideas into systems." : "Experimentos que convierten ideas en sistemas."}
+          description={english ? "Personal and conceptual work around agents, local models and hybrid architectures." : "Trabajo personal y conceptual alrededor de agentes, modelos locales y arquitecturas híbridas."}
         />
         <div className="project-grid">
           {projects.map((project, index) => (
@@ -24,7 +29,7 @@ export function Projects() {
               <h3>{project.title}</h3>
               <p>{project.description}</p>
               {project.pipeline ? (
-                <div className="pipeline" aria-label="Flujo conceptual">
+                <div className="pipeline" aria-label={english ? "Conceptual workflow" : "Flujo conceptual"}>
                   {project.pipeline.map((step, stepIndex) => (
                     <span key={step}>{step}{stepIndex < project.pipeline!.length - 1 ? <ArrowRight aria-hidden="true" /> : null}</span>
                   ))}
@@ -36,7 +41,7 @@ export function Projects() {
           ))}
         </div>
         <p className="projects-footnote">
-          Estos proyectos documentan mi proceso de aprendizaje. Las notas técnicas viven en el <Link href="/blog">blog <ArrowRight aria-hidden="true" /></Link>.
+          {english ? <>These projects document my learning process. Technical notes live on the <Link href="/blog">blog <ArrowRight aria-hidden="true" /></Link>.</> : <>Estos proyectos documentan mi proceso de aprendizaje. Las notas técnicas viven en el <Link href="/blog">blog <ArrowRight aria-hidden="true" /></Link>.</>}
         </p>
       </div>
     </section>

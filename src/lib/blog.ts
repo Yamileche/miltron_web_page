@@ -12,10 +12,15 @@ export type BlogPostMeta = {
   tags: string[];
   published: boolean;
   readingTime: number;
+  translation?: {
+    title: string;
+    description: string;
+  };
 };
 
 export type BlogPost = BlogPostMeta & {
   content: string;
+  translation?: BlogPostMeta["translation"] & { content: string };
 };
 
 function readingMinutes(content: string) {
@@ -32,6 +37,11 @@ function parsePost(fileName: string): BlogPost {
     throw new Error(`El artículo "${fileName}" requiere title, description y date.`);
   }
 
+  const translationPath = path.join(BLOG_DIRECTORY, "en", fileName);
+  const translation = fs.existsSync(translationPath)
+    ? matter(fs.readFileSync(translationPath, "utf8"))
+    : undefined;
+
   return {
     slug,
     title: String(data.title),
@@ -41,6 +51,13 @@ function parsePost(fileName: string): BlogPost {
     published: data.published !== false,
     readingTime: readingMinutes(content),
     content,
+    translation: translation && translation.data.title && translation.data.description
+      ? {
+          title: String(translation.data.title),
+          description: String(translation.data.description),
+          content: translation.content,
+        }
+      : undefined,
   };
 }
 
@@ -69,6 +86,9 @@ export function getAllPostMetadata(): BlogPostMeta[] {
     tags: post.tags,
     published: post.published,
     readingTime: post.readingTime,
+    translation: post.translation
+      ? { title: post.translation.title, description: post.translation.description }
+      : undefined,
   }));
 }
 
@@ -88,8 +108,8 @@ export function getAllTags() {
   );
 }
 
-export function formatPostDate(date: string) {
-  return new Intl.DateTimeFormat("es-MX", {
+export function formatPostDate(date: string, locale = "es-MX") {
+  return new Intl.DateTimeFormat(locale, {
     day: "numeric",
     month: "short",
     year: "numeric",

@@ -1,32 +1,37 @@
+"use client";
+
 import { ArrowDown, ArrowRight, Github, Linkedin, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { profile } from "@/data/profile";
 import { TagList } from "@/components/ui/tag-list";
+import { useLanguage } from "@/components/language-provider";
 
 const heroSkills = ["Python", "FastAPI", "AI Agents", "LangGraph", "Azure", "AWS", "Rust"];
 
 export function Hero() {
+  const { language } = useLanguage();
+  const english = language === "en";
   return (
     <section className="hero section" id="inicio" aria-labelledby="hero-title">
       <div className="container hero-grid">
         <div className="hero-copy">
           <p className="availability">
             <span aria-hidden="true" />
-            Construyendo y aprendiendo desde CDMX
+            {english ? "Building and learning from Mexico City" : "Construyendo y aprendiendo desde CDMX"}
           </p>
           <h1 id="hero-title">{profile.name}</h1>
           <p className="hero-role">{profile.headline}</p>
-          <p className="hero-intro">{profile.intro}</p>
+          <p className="hero-intro">{english ? "I build backend services, integrations and cloud systems primarily with Python. I am currently deepening my knowledge of AI agents, LLMs, Rust and hybrid architectures to build more efficient and robust software." : profile.intro}</p>
 
           <TagList tags={heroSkills} compact />
 
           <div className="hero-actions">
             <Link className="button button--primary" href="/#proyectos">
-              Ver proyectos <ArrowDown aria-hidden="true" />
+              {english ? "View projects" : "Ver proyectos"} <ArrowDown aria-hidden="true" />
             </Link>
             <Link className="button button--secondary" href="/blog">
-              Leer blog <ArrowRight aria-hidden="true" />
+              {english ? "Read the blog" : "Leer blog"} <ArrowRight aria-hidden="true" />
             </Link>
           </div>
 

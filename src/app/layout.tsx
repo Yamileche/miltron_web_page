@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { LanguageProvider } from "@/components/language-provider";
 import { profile, siteConfig } from "@/data/profile";
 import "highlight.js/styles/github-dark.css";
 import "./globals.css";
@@ -55,10 +56,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="es" suppressHydrationWarning>
       <head><script dangerouslySetInnerHTML={{ __html: themeScript }} /></head>
       <body>
-        <a className="skip-link" href="#contenido">Saltar al contenido</a>
-        <Navbar />
-        <main id="contenido">{children}</main>
-        <Footer />
+        <LanguageProvider>
+          <a className="skip-link" href="#contenido">Saltar al contenido</a>
+          <Navbar />
+          <main id="contenido">{children}</main>
+          <Footer />
+        </LanguageProvider>
       </body>
     </html>
   );

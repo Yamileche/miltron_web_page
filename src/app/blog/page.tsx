@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
 import { BlogExplorer } from "@/components/blog/blog-explorer";
+import { BlogHeader } from "@/components/blog/blog-header";
 import { getAllPostMetadata, getAllTags } from "@/lib/blog";
 
 export const metadata: Metadata = {
@@ -22,15 +21,7 @@ export default function BlogPage() {
   return (
     <div className="blog-page">
       <div className="container container--narrow">
-        <Link className="back-link" href="/"><ArrowLeft aria-hidden="true" /> Volver al portfolio</Link>
-        <header className="blog-header">
-          <p className="eyebrow">~/writing</p>
-          <h1>Notas técnicas</h1>
-          <p>
-            Aprendizajes, experimentos y preguntas abiertas sobre backend, agentes de AI, cloud y Rust.
-          </p>
-          <div className="blog-stat"><strong>{posts.length}</strong><span>artículos publicados</span></div>
-        </header>
+        <BlogHeader postCount={posts.length} />
         <BlogExplorer posts={posts} tags={tags} />
       </div>
     </div>

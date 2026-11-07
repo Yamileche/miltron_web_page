@@ -2,8 +2,9 @@
 
 import { Search } from "lucide-react";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { BlogPostMeta } from "@/lib/blog";
+import { useLanguage } from "@/components/language-provider";
 
 type BlogExplorerProps = {
   posts: BlogPostMeta[];
@@ -11,33 +12,40 @@ type BlogExplorerProps = {
 };
 
 export function BlogExplorer({ posts, tags }: BlogExplorerProps) {
+  const { language } = useLanguage();
+  const english = language === "en";
   const [query, setQuery] = useState("");
   const [activeTag, setActiveTag] = useState("Todos");
+
+  useEffect(() => {
+    setActiveTag(english ? "All" : "Todos");
+  }, [english]);
 
   const filteredPosts = useMemo(() => {
     const normalized = query.trim().toLocaleLowerCase("es");
     return posts.filter((post) => {
-      const matchesTitle = post.title.toLocaleLowerCase("es").includes(normalized);
-      const matchesTag = activeTag === "Todos" || post.tags.includes(activeTag);
+      const title = english && post.translation ? post.translation.title : post.title;
+      const matchesTitle = title.toLocaleLowerCase(english ? "en" : "es").includes(normalized);
+      const matchesTag = activeTag === (english ? "All" : "Todos") || post.tags.includes(activeTag);
       return matchesTitle && matchesTag;
     });
-  }, [activeTag, posts, query]);
+  }, [activeTag, english, posts, query]);
 
   return (
     <>
       <div className="blog-controls">
         <label className="search-field">
           <Search aria-hidden="true" />
-          <span className="sr-only">Buscar por título</span>
+          <span className="sr-only">{english ? "Search by title" : "Buscar por título"}</span>
           <input
             type="search"
-            placeholder="Buscar por título…"
+            placeholder={english ? "Search by title…" : "Buscar por título…"}
             value={query}
             onChange={(event) => setQuery(event.target.value)}
           />
         </label>
-        <div className="tag-filters" aria-label="Filtrar por tema">
-          {["Todos", ...tags].map((tag) => (
+        <div className="tag-filters" aria-label={english ? "Filter by topic" : "Filtrar por tema"}>
+          {[(english ? "All" : "Todos"), ...tags].map((tag) => (
             <button
               type="button"
               key={tag}
@@ -55,21 +63,21 @@ export function BlogExplorer({ posts, tags }: BlogExplorerProps) {
         {filteredPosts.map((post) => (
           <article className="post-row" key={post.slug}>
             <div className="post-row-meta">
-              <time dateTime={post.date}>{formatDate(post.date)}</time>
-              <span>{post.readingTime} min</span>
+              <time dateTime={post.date}>{formatDate(post.date, english)}</time>
+              <span>{post.readingTime} {english ? "min read" : "min"}</span>
             </div>
             <div>
               <h2>
-                <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+                <Link href={`/blog/${post.slug}`}>{english && post.translation ? post.translation.title : post.title}</Link>
               </h2>
-              <p>{post.description}</p>
-              <ul className="post-tags" aria-label="Temas">
+              <p>{english && post.translation ? post.translation.description : post.description}</p>
+              <ul className="post-tags" aria-label={english ? "Topics" : "Temas"}>
                 {post.tags.map((tag) => (
                   <li key={tag}>{tag}</li>
                 ))}
               </ul>
             </div>
-            <Link className="post-arrow" href={`/blog/${post.slug}`} aria-label={`Leer ${post.title}`}>
+            <Link className="post-arrow" href={`/blog/${post.slug}`} aria-label={`${english ? "Read" : "Leer"} ${english && post.translation ? post.translation.title : post.title}`}>
               ↗
             </Link>
           </article>
@@ -77,14 +85,14 @@ export function BlogExplorer({ posts, tags }: BlogExplorerProps) {
       </div>
 
       {filteredPosts.length === 0 ? (
-        <p className="empty-state">No encontré artículos con esos filtros.</p>
+        <p className="empty-state">{english ? "No articles matched those filters." : "No encontré artículos con esos filtros."}</p>
       ) : null}
     </>
   );
 }
 
-function formatDate(date: string) {
-  return new Intl.DateTimeFormat("es-MX", {
+function formatDate(date: string, english: boolean) {
+  return new Intl.DateTimeFormat(english ? "en-US" : "es-MX", {
     day: "numeric",
     month: "short",
     year: "numeric",
