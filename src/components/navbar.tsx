@@ -12,7 +12,7 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const { language } = useLanguage();
   const labels = language === "en"
-    ? ["Home", "About", "Experience", "Projects", "Skills", "Learning", "Blog", "Contact"]
+    ? ["Home", "About", "Experience", "Projects", "Blog", "Contact"]
     : navigation.map((item) => item.label);
 
   return (

@@ -2,6 +2,7 @@ import { About } from "@/components/about";
 import { BlogPreview } from "@/components/blog-preview";
 import { Contact } from "@/components/contact";
 import { Experience } from "@/components/experience";
+import { EngineeringHighlights } from "@/components/engineering-highlights";
 import { Hero } from "@/components/hero";
 import { Learning } from "@/components/learning";
 import { Projects } from "@/components/projects";
@@ -25,6 +26,7 @@ export default function HomePage() {
       <Hero />
       <About />
       <Experience />
+      <EngineeringHighlights />
       <Projects />
       <Skills />
       <Learning />

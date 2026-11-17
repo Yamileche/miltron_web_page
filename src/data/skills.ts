@@ -6,33 +6,33 @@ export type SkillGroup = {
 
 export const skillGroups: readonly SkillGroup[] = [
   {
-    title: "Backend",
+    title: "Backend Engineering",
     code: "01",
-    items: ["Python", "FastAPI", "Flask", "SQLAlchemy", "REST APIs", "Pydantic", "Unit Testing"],
+    items: ["Python", "FastAPI", "Flask", "REST APIs", "SQL", "Microservices", "Software Architecture", "Unit Testing", "Integration Testing"],
+  },
+  {
+    title: "Cloud & Infrastructure",
+    code: "02",
+    items: ["AWS Lambda", "AWS S3", "AWS SQS", "AWS CloudWatch", "Azure Functions", "Docker", "Git", "Serverless Architecture"],
   },
   {
     title: "Artificial Intelligence",
-    code: "02",
-    items: ["LangGraph", "LangChain", "Ollama", "LLM Agents", "RAG", "Structured Outputs", "Tool Calling", "Local LLMs"],
-  },
-  {
-    title: "Cloud",
     code: "03",
-    items: ["Azure Functions", "Azure AI", "AWS Lambda", "CloudWatch", "SQS", "Serverless"],
+    items: ["Azure OpenAI", "OpenAI API", "LLMs", "Conversational Agents", "Microsoft Bot Framework"],
   },
   {
-    title: "Databases & Data",
+    title: "AI Projects & Research",
     code: "04",
-    items: ["MySQL", "PostgreSQL", "Redis", "SQL", "Polars", "Pandas"],
+    items: ["LangGraph", "LangChain", "RAG", "MCP", "Ollama", "Embeddings", "Hybrid Retrieval"],
   },
   {
-    title: "Infrastructure",
+    title: "Databases",
     code: "05",
-    items: ["Docker", "Git", "CI/CD", "Linux"],
+    items: ["MySQL", "PostgreSQL", "Redis", "BigQuery", "SQLite"],
   },
   {
-    title: "Profundizando",
+    title: "Currently Exploring",
     code: "06",
-    items: ["Rust", "Python + Rust", "Systems Programming", "AI Engineering", "Agentic Architectures"],
+    items: ["Rust", "Hybrid Python–Rust architectures", "Advanced Agentic Systems"],
   },
 ];

@@ -9,12 +9,7 @@ import { useLanguage } from "@/components/language-provider";
 export function About() {
   const { language } = useLanguage();
   const english = language === "en";
-  const about = english ? [
-    "I am a Backend/Cloud developer with a degree in Physics and Mathematics from the Escuela Superior de Física y Matemáticas at Instituto Politécnico Nacional.",
-    "My work focuses on Python backend development, building and integrating APIs, cloud services, databases and automation.",
-    "Alongside that work, I am growing toward AI Engineering, especially LLM-based agents, RAG, LangGraph and local model execution.",
-    "I am also learning Rust to better understand low-level systems, ownership, concurrency and performance, and to explore hybrid Python–Rust architectures.",
-  ] : profile.about;
+  const about = profile.about[language];
   return (
     <section className="section section--bordered" id="sobre-mi">
       <div className="container">
@@ -39,9 +34,9 @@ export function About() {
           </div>
           <div>
             <p>{education.program}</p>
-            <span>{education.period}</span>
+            <span>{education.period[language]}</span>
           </div>
-          <p>{english ? "A foundation that strengthened my analytical thinking and the way I approach complex problems in software and Artificial Intelligence." : education.description}</p>
+          <p>{education.description[language]}</p>
         </div>
       </div>
     </section>

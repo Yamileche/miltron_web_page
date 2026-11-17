@@ -1,13 +1,13 @@
 "use client";
 
-import { ArrowDown, ArrowRight, Github, Linkedin, MapPin } from "lucide-react";
+import { ArrowDown, Download, Github, Linkedin, Mail, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { profile } from "@/data/profile";
 import { TagList } from "@/components/ui/tag-list";
 import { useLanguage } from "@/components/language-provider";
 
-const heroSkills = ["Python", "FastAPI", "AI Agents", "LangGraph", "Azure", "AWS", "Rust"];
+const heroSkills = ["Python", "Microservices", "AWS", "Azure", "Generative AI", "LangGraph"];
 
 export function Hero() {
   const { language } = useLanguage();
@@ -18,11 +18,11 @@ export function Hero() {
         <div className="hero-copy">
           <p className="availability">
             <span aria-hidden="true" />
-            {english ? "Building and learning from Mexico City" : "Construyendo y aprendiendo desde CDMX"}
+            {english ? "Production systems · Mexico City" : "Sistemas productivos · Ciudad de México"}
           </p>
           <h1 id="hero-title">{profile.name}</h1>
           <p className="hero-role">{profile.headline}</p>
-          <p className="hero-intro">{english ? "I build backend services, integrations and cloud systems primarily with Python. I am currently deepening my knowledge of AI agents, LLMs, Rust and hybrid architectures to build more efficient and robust software." : profile.intro}</p>
+          <p className="hero-intro">{profile.intro[language]}</p>
 
           <TagList tags={heroSkills} compact />
 
@@ -30,9 +30,8 @@ export function Hero() {
             <Link className="button button--primary" href="/#proyectos">
               {english ? "View projects" : "Ver proyectos"} <ArrowDown aria-hidden="true" />
             </Link>
-            <Link className="button button--secondary" href="/blog">
-              {english ? "Read the blog" : "Leer blog"} <ArrowRight aria-hidden="true" />
-            </Link>
+            {profile.cvPath ? <a className="button button--secondary" href={profile.cvPath} download><Download aria-hidden="true" /> {english ? "Download CV" : "Descargar CV"}</a> : null}
+            <Link className="button button--secondary" href="/#contacto"><Mail aria-hidden="true" /> {english ? "Contact" : "Contacto"}</Link>
           </div>
 
           <div className="social-links" aria-label="Perfiles profesionales">
@@ -83,7 +82,7 @@ export function Hero() {
               <p className="terminal-output">backend · cloud · ai · rust<span className="cursor" aria-hidden="true" /></p>
             </div>
           </div>
-          <p className="hero-aside-note">software engineer / continuous learner</p>
+          <p className="hero-aside-note">backend · cloud · generative ai</p>
         </div>
       </div>
     </section>

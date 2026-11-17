@@ -1702,6 +1702,24 @@ svg {
   transition: transform 150ms ease, border-color 150ms ease;
 }
 
+.project-detail-link { display: inline-flex; margin-top: 18px; align-items: center; gap: 6px; color: var(--accent); font-family: var(--font-mono); font-size: 0.68rem; }
+.project-detail-link svg { width: 14px; height: 14px; }
+.project-page { min-height: 80vh; padding: 74px 0 120px; }
+.project-detail-grid { display: grid; gap: 28px; }
+.project-detail-grid section { padding: 24px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+.project-detail-grid h2 { margin: 0 0 10px; font-size: 1rem; }
+.project-detail-grid p, .project-detail-grid li { color: var(--text-secondary); line-height: 1.7; }
+.project-detail-grid ul { margin: 0; padding-left: 20px; }
+
+@media (max-width: 760px) {
+  .highlights-grid { grid-template-columns: 1fr; }
+  .highlight-card { min-height: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+}
+
 .post-arrow:hover {
   border-color: var(--accent);
   color: var(--accent);
@@ -1713,6 +1731,33 @@ svg {
   color: var(--text-secondary);
   text-align: center;
 }
+
+/* Engineering highlights */
+.highlights-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.highlight-card {
+  display: flex;
+  min-height: 270px;
+  padding: 26px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  flex-direction: column;
+}
+
+.highlight-card__top { display: flex; align-items: center; gap: 10px; }
+.highlight-card__top svg { width: 17px; height: 17px; color: var(--accent); }
+.highlight-card h3 { margin: 24px 0 10px; font-size: 1.35rem; letter-spacing: -0.035em; }
+.highlight-card > p { margin: 0 0 20px; color: var(--text-secondary); font-size: 0.88rem; line-height: 1.65; }
+.highlight-card .tag-list { margin-top: auto; }
+.latency-comparison { display: grid; margin: 4px 0 20px; gap: 9px; }
+.latency-comparison span { display: block; width: var(--value); min-width: 72px; padding: 7px 10px; border-radius: 5px; background: var(--accent-soft); color: var(--accent); font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; }
+.latency-comparison span + span { background: color-mix(in srgb, var(--accent-soft) 45%, transparent); }
+.latency-comparison small { margin-left: 4px; color: var(--text-tertiary); font-size: 0.58rem; font-weight: 400; }
 
 /* Article */
 .article-page {

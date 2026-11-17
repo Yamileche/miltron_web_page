@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   applicationName: `${profile.shortName} Portfolio`,
   authors: [{ name: profile.name }],
   creator: profile.name,
-  keywords: ["Backend Developer", "Python", "Cloud", "AI Engineering", "LangGraph", "Rust", "México"],
+  keywords: ["Backend Engineer", "AI Engineer", "Python Developer", "Generative AI", "Cloud Engineer", "Microservices", "AWS", "Azure", "LangGraph", "Mexico City"],
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",

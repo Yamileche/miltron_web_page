@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, FlaskConical } from "lucide-react";
+import { ArrowRight, ArrowUpRight, FlaskConical } from "lucide-react";
 import Link from "next/link";
 import { projects } from "@/data/projects";
 import { SectionHeading } from "@/components/ui/section-heading";
@@ -37,6 +37,7 @@ export function Projects() {
               ) : null}
               {project.note ? <p className="project-note">{`// ${project.note}`}</p> : null}
               <TagList tags={project.technologies} compact />
+              <Link className="project-detail-link" href={`/projects/${project.slug}`}>{english ? "View case study" : "Ver ficha técnica"} <ArrowUpRight aria-hidden="true" /></Link>
             </article>
           ))}
         </div>
